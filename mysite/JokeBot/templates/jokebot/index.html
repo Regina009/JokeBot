@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
+		<style>
+			body {font-family: Times New Roman, Garamond, sans-serif;}
+			* {box-sizing: border-box;}
+	
+			/* Hide chat popup on Page Load */
+			.chatPopup {
+				border: 2px solid #f1f1f1;
+				bottom: 0;
+				display: none;
+				position: fixed;
+				right: 20px;
+				z-index: 9;
+			}
+
+			/* form body style */
+			.chatBody {
+				background-color: #FDF5E6;
+				max-width: 400px;
+				padding: 10px;		
+			}
+			
+			/* button STYLE */
+			.chatBody .btn {
+				background-color: #ffaa0c;
+				border: none;
+				color: white;
+				cursor: pointer;
+				margin-bottom:7px;
+				opacity: 1.0;
+				padding: 20px 20px;	
+				width: 100%;
+			}
+
+			/* button hover */
+			.chatBody .btn:hover, .openchat:hover {
+				opacity: 1;
+			}
+
+			/* textarea style */
+			.chatBody .chatJokeBotInput {
+				background: #ffffff;
+				border: none;
+				margin: 7px 0 15px 0;
+				min-height: 250px;
+				padding: 15px;
+				resize: none;			  
+				width: 100%;		  
+			}
+
+			.chatInput {
+				background: #ffffff;
+				border: none;
+				margin-bottom: 7px;
+				min-height: 50px;
+				padding: 15px;
+				resize: none;
+				width: 100%;
+			}
+			
+			/* Click button to open chat at the bottom of page */
+			.openchat {
+				background-color: #ffaa0c;
+				border: none;
+				bottom: 25px;
+				color: white;
+				cursor: pointer;
+				opacity: 1.0;
+				padding: 15px 20px;
+				position: fixed;		  
+				right: 25px;
+				width: 300px;
+			}
+		</style>
+		
+        <title>JokeBot</title>
+		
+        <script>
+			const chatInput = document.getElementById("chatInput");
+			const chatJokeBot = document.getElementById("chatJokeBot");
+			
+			function closeChat() {
+				document.getElementById("JokeBot").style.display = "none";
+			}
+			
+			function openChat() {			
+				document.getElementById("JokeBot").style.display = "block";
+			}
+
+			window.onload = function() {
+				document.getElementById("chatUser").focus();
+			};
+
+			function readJokeInput(element, e) {
+			  if (e.keyCode == 13) {
+				askJoke(element.value);
+			  }
+			}
+			
+			function askJoke(userInput) {
+				const chatRequest = new Request('/', {
+					method: 'POST'
+				});
+				
+				fetch(chatRequest).then(function(response) {
+					return response.text;
+				}).then(function(text) {
+					chatUser.value = '';
+					chatJokeBot.innerText = text;				
+				});
+			}
+			
+		</script>
+    </head>
+    <body>
+        <!-- Contents loaded from server is inserted here by javascript -->
+		<button class="openchat" onclick="openChat()">Knock Knock</button>
+		
+		<div id="JokeBot" class="chatPopup">		
+			<form class="chatBody">
+				<h3>Chat With Me!</h3>
+				<textarea readonly id="chatJokeBot" name="returnJoke" class="chatJokeBotInput"></textarea>
+				<input id="chatUser" name="userQuestion" type="text" class="chatInput" />
+				<button type="button" class="btn" style="margin-bottom: 15px;" onclick="closeChat()">Leave Chat</button>
+		  </form>
+		</div>
+    </body>
+</html>
